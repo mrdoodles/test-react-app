@@ -8,9 +8,22 @@ on:
 
 jobs:
   build:
+    timeout-minutes: 5
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
+
+      - uses: actions/cache@v2
+        id: yarn-cache # use this to check for `cache-hit` (`steps.yarn-cache.outputs.cache-hit != 'true'`)
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
 
       - name: Use NodeJS
         uses: actions/setup-node@v1
@@ -24,9 +37,22 @@ jobs:
         env:
           CI: true
 
+      - name: Upload Test Coverage
+        uses: actions/upload-artifact@v1
+        with:
+          path: coverage
+          name: code-coverage
+
       - name: Build Project
         if: github.event_name == 'push'
         run: yarn build
+
+      - name: Upload Build Folder
+        if: github.event_name == 'push' && success()
+        uses: actions/upload-artifact@v1
+        with:
+          path: build
+          name: build
 
       - name: Deploy to Staging
         if: github.event_name == 'push'
