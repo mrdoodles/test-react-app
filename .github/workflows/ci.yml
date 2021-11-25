@@ -43,6 +43,10 @@ jobs:
           path: coverage
           name: code-coverage
 
+      - name: Update Browser DB
+        if: github.event_name == 'push'
+        run: npx browserslist@latest --update-db
+
       - name: Build Project
         if: github.event_name == 'push'
         run: yarn build
