@@ -1,0 +1,4 @@
+* @mrdoodles
+*.js @mrdoodles
+*.yml @mrdoodles
+/public/ @mrdoodles
