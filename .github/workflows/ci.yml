@@ -1,0 +1,36 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [develop]
+  push:
+    branches: [develop]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Use NodeJS
+        uses: actions/setup-node@v1
+        with:
+          node-version: "16.x"
+      - run: corepack enable
+      - run: yarn set version stable
+      - run: yarn install --frozen-lockfile
+      - run: yarn format:check
+      - run: yarn test --coverage
+        env:
+          CI: true
+
+      - name: Build Project
+        if: github.event_name == 'push'
+        run: yarn build
+
+      - name: Deploy to Staging
+        if: github.event_name == 'push'
+        run: npx surge --project build --domain fantastic-dude.surge.sh
+        env:
+          SURGE_LOGIN: ${{ secrets.SURGE_LOGIN }}
+          SURGE_TOKEN: ${{ secrets.SURGE_TOKEN }}
