@@ -37,9 +37,21 @@ jobs:
         env:
           CI: true
 
+      - name: Upload Test Coverage
+        uses: actions/upload-artifact@v1
+        with:
+          path: coverage
+          name: code-coverage
+
       - name: Build Project
         if: github.event_name == 'push'
         run: yarn build
+
+      - name: Upload Build Folder
+        uses: actions/upload-artifact@v1
+        with:
+          path: build
+          name: build
 
       - name: Deploy to Staging
         if: github.event_name == 'push'
