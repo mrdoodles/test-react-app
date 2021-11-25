@@ -13,14 +13,15 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Get yarn cache directory path
-        id: yarn-cache-dir-path
-        run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
+      # - name: Get yarn cache directory path
+      #   id: yarn-cache-dir-path
+      #   run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
 
       - uses: actions/cache@v2
         id: yarn-cache # use this to check for `cache-hit` (`steps.yarn-cache.outputs.cache-hit != 'true'`)
         with:
-          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          # path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          path: $HOME/.yarn
           key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
             ${{ runner.os }}-yarn-
@@ -37,10 +38,10 @@ jobs:
         env:
           CI: true
 
-      - run: ls -a $HOME
-      - run: ls -a $HOME/.yarn
-      - run: ls -a $HOME/.yarn/berry
-      - run: du -h $HOME/.yarn/berry/cache/
+      # - run: ls -a $HOME
+      # - run: ls -a $HOME/.yarn
+      # - run: ls -a $HOME/.yarn/berry
+      # - run: du -h $HOME/.yarn/berry/cache/
 
       - name: Build Project
         if: github.event_name == 'push'
