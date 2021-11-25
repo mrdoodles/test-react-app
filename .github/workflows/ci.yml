@@ -37,9 +37,6 @@ jobs:
         env:
           CI: true
 
-      - run: ls -a $HOME
-      - run: ls -a $HOME/.yarn
-
       - name: Build Project
         if: github.event_name == 'push'
         run: yarn build
