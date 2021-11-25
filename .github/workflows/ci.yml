@@ -16,13 +16,23 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Get the current branch name
-        # shell: bash
+      - name: Get the current branch name - not pr
+        if: github.event_name != 'pull_request'
         run: echo "::set-output name=branch::${GITHUB_REF#refs/heads/}"
         id: myref
 
+      - name: Get the current branch name - pr
+        if: github.event_name == 'pull_request'
+        run: echo "::set-output name=branch::${GITHUB_HEAD_REF}"
+        id: srcref
+
       - name: Show current branch
+        if: github.event_name != 'pull_request'
         run: echo ${{ steps.myref.outputs.branch }}
+
+      - name: Show source branch
+        if: github.event_name == 'pull_request'
+        run: echo ${{ steps.srcref.outputs.branch }}
 
       - name: Get yarn cache directory path
         id: yarn-cache-dir-path
@@ -76,7 +86,7 @@ jobs:
           zip -r coverage.zip ./coverage
 
       - name: Create Release
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main' && steps.myref.outputs.branch == 'develop'
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main' && steps.srcref.outputs.branch == 'develop'
         run: npx semantic-release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -86,5 +96,5 @@ jobs:
         run: npx surge --project build --domain fantastic-dude.surge.sh
 
       - name: Deploy to Production
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main' && steps.myref.outputs.branch == 'develop'
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main' && steps.srcref.outputs.branch == 'develop'
         run: npx surge --project build --domain pink-dolphin.surge.sh
