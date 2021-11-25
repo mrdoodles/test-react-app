@@ -48,6 +48,7 @@ jobs:
         run: yarn build
 
       - name: Upload Build Folder
+        if: github.event_name == 'push' && success()
         uses: actions/upload-artifact@v1
         with:
           path: build
