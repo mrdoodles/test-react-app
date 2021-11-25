@@ -13,9 +13,6 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - run: ls -a $HOME
-      - run: ls -a $HOME/.yarn
-
       # - name: Cache node modules
       #   uses: actions/cache@v1
       #   with:
@@ -32,6 +29,9 @@ jobs:
       - run: yarn test --coverage
         env:
           CI: true
+
+      - run: ls -a $HOME
+      - run: ls -a $HOME/.yarn
 
       - name: Build Project
         if: github.event_name == 'push'
