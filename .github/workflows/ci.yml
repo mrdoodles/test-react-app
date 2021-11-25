@@ -20,7 +20,7 @@ jobs:
       - run: yarn set version stable
       - run: yarn install --frozen-lockfile
       - run: yarn format:check
-      - run: yarn test -- --coverage
+      - run: yarn test --coverage
         env:
           CI: true
 
@@ -31,3 +31,6 @@ jobs:
       - name: Deploy to Staging
         if: github.event_name == 'push'
         run: npx surge --project build --domain fantastic-dude.surge.sh
+        env:
+          SURGE_LOGIN: ${{ secrets.SURGE_LOGIN }}
+          SURGE_TOKEN: ${{ secrets.SURGE_TOKEN }}
