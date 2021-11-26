@@ -12,13 +12,12 @@ jobs:
       - name: Fail Invalid Branch
         if: ${{ github.head_ref }} != 'develop'
         run: exit 1
-        
+
   main-pr-info:
     needs: [validate-branch]
     timeout-minutes: 1
     runs-on: ubuntu-latest
     steps:
-
       - run: echo "WORKFLOW             ${{ github.workflow }}"
       - run: echo "GITHUB_EVENT_NAME    ${{ github.event_name }}"
       - run: echo "GITHUB_EVENT_PATH    ${{ github.event_path }}"
@@ -43,4 +42,3 @@ jobs:
       #     echo "${{ github.token }}"
       #     # git clone git@github:$GIT_REPOSITORY
       #     # git checkout $GITHUB_SHA
-
