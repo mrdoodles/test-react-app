@@ -100,3 +100,8 @@ jobs:
         env:
           SURGE_LOGIN: ${{ secrets.SURGE_LOGIN }}
           SURGE_TOKEN: ${{ secrets.SURGE_TOKEN }}
+
+      - name: Upload code coverage to codecov
+        run: npx codecov
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODEVOV_TOKEN }}
