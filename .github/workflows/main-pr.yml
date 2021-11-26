@@ -12,8 +12,12 @@ jobs:
       - name: Fail Invalid Branch
         if: ${{ github.head_ref }} != 'develop'
         run: |
-          echo "main only allowa PR's from develop."
-          exit 1
+          echo "source branch -> ${{ github.head_ref }}"
+          echo "main only allows PR's from develop."
+          if [ ${{ github.head_ref }} != 'develop' ]; then
+            exit 1
+          fi
+
 
   main-pr-info:
     timeout-minutes: 1
