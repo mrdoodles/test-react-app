@@ -1,5 +1,5 @@
 <p align="center">
-![Development Badge](https://github.com/mrdoodles/test-react-app/workflows/Develop%20Push/badge.svg?branch=develop&event=push)
+<img  src="https://github.com/mrdoodles/test-react-app/workflows/Develop%20Push/badge.svg?branch=develop&event=push" alt="Development Status"/>
 </p>
 
 # Getting Started with Create React App
