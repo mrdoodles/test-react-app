@@ -5,7 +5,16 @@ on:
     branches: [main]
 
 jobs:
+  validate-branch:
+    timeout-minutes: 1
+    runs-on: ubuntu-latest
+    steps:
+      - name: Fail Invalid Branch
+        if: ${{ github.head_ref }} != 'develop'
+        run: exit 1
+        
   main-pr-info:
+    needs: [validate-branch]
     timeout-minutes: 1
     runs-on: ubuntu-latest
     steps:
