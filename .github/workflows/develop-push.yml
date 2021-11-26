@@ -36,59 +36,59 @@ jobs:
       #     # git checkout $GITHUB_SHA
 
 
-  build:
-    timeout-minutes: 5
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
+  # build:
+  #   timeout-minutes: 5
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v2
 
-      - name: Get yarn cache directory path
-        id: yarn-cache-dir-path
-        run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
+  #     - name: Get yarn cache directory path
+  #       id: yarn-cache-dir-path
+  #       run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
 
-      - uses: actions/cache@v2
-        id: yarn-cache # use this to check for `cache-hit` (`steps.yarn-cache.outputs.cache-hit != 'true'`)
-        with:
-          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-yarn-
+  #     - uses: actions/cache@v2
+  #       id: yarn-cache # use this to check for `cache-hit` (`steps.yarn-cache.outputs.cache-hit != 'true'`)
+  #       with:
+  #         path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+  #         key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+  #         restore-keys: |
+  #           ${{ runner.os }}-yarn-
 
-      - name: Use NodeJS
-        uses: actions/setup-node@v1
-        with:
-          node-version: "16.x"
-      - run: corepack enable
-      - run: yarn set version stable
-      - run: yarn install --frozen-lockfile
-      - run: yarn format:check
-      - run: yarn test --coverage
-        env:
-          CI: true
+  #     - name: Use NodeJS
+  #       uses: actions/setup-node@v1
+  #       with:
+  #         node-version: "16.x"
+  #     - run: corepack enable
+  #     - run: yarn set version stable
+  #     - run: yarn install --frozen-lockfile
+  #     - run: yarn format:check
+  #     - run: yarn test --coverage
+  #       env:
+  #         CI: true
 
-      - name: Upload Test Coverage
-        uses: actions/upload-artifact@v1
-        with:
-          path: coverage
-          name: code-coverage
+  #     - name: Upload Test Coverage
+  #       uses: actions/upload-artifact@v1
+  #       with:
+  #         path: coverage
+  #         name: code-coverage
 
-      - name: Update Browser DB
-        run: npx browserslist@latest --update-db
+  #     - name: Update Browser DB
+  #       run: npx browserslist@latest --update-db
 
-      - name: Build Project
-        run: yarn build
+  #     - name: Build Project
+  #       run: yarn build
 
-      - name: Upload Build Folder
-        if: success()
-        uses: actions/upload-artifact@v1
-        with:
-          path: build
-          name: build
+  #     - name: Upload Build Folder
+  #       if: success()
+  #       uses: actions/upload-artifact@v1
+  #       with:
+  #         path: build
+  #         name: build
 
-      - name: Deploy to Staging
-        if: success()
-        run: npx surge --project build --domain fantastic-dude.surge.sh
-        env:
-          SURGE_LOGIN: ${{ secrets.SURGE_LOGIN }}
-          SURGE_TOKEN: ${{ secrets.SURGE_TOKEN }}
+  #     - name: Deploy to Staging
+  #       if: success()
+  #       run: npx surge --project build --domain fantastic-dude.surge.sh
+  #       env:
+  #         SURGE_LOGIN: ${{ secrets.SURGE_LOGIN }}
+  #         SURGE_TOKEN: ${{ secrets.SURGE_TOKEN }}
 
