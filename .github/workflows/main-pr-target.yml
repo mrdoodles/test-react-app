@@ -1,0 +1,35 @@
+name: Main PR Target
+
+on:
+  pull_request_target:
+    branches: [main]
+
+jobs:
+  main-pr-target-info:
+    timeout-minutes: 1
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "WORKFLOW             ${{ github.workflow }}"
+      - run: echo "GITHUB_EVENT_NAME    ${{ github.event_name }}"
+      - run: echo "GITHUB_EVENT_PATH    ${{ github.event_path }}"
+      - run: echo "GITHUB_HEAD_REF      ${{ github.head_ref }}"
+      - run: echo "GITHUB_JOB           ${{ github.job }}"
+      - run: echo "GITHUB_REF           ${{ github.ref }}"
+      - run: echo "GITHUB_REF_NAME      ${{ github.ref_name }}"
+      - run: echo "GITHUB_REF_PROTECTED ${{ github.ref_protected }}"
+      - run: echo "GITHUB_REF_TYPE      ${{ github.ref_type }}"
+
+      # - uses: actions/checkout@v2
+      # - name: payload
+
+      #   run: echo "${{ github.event.client_payload.env }}"
+      # - name: List files
+      #   run: |
+      #     pwd
+      #     ls -a
+      #     echo $GITHUB_SHA
+      #     echo $GITHUB_REPOSITORY
+      #     echo $GITHUB_WORKSPACE
+      #     echo "${{ github.token }}"
+      #     # git clone git@github:$GIT_REPOSITORY
+      #     # git checkout $GITHUB_SHA
