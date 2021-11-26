@@ -14,7 +14,7 @@ function App() {
           href="https://reactjs.org"
           target="_blank"
           rel="noopener noreferrer">
-          Learn Github Actions Test App
+          Learn Github Actions Test
         </a>
       </header>
     </div>
