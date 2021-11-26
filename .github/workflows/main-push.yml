@@ -1,38 +1,45 @@
-name: CI
+name: Main Push
 
 on:
-  pull_request:
-    branches: [develop, main]
   push:
-    branches: [develop, main]
+    branches: [main]
 
 jobs:
-  build:
+  main-push-info:
+    timeout-minutes: 1
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "WORKFLOW             ${{ github.workflow }}"
+      - run: echo "GITHUB_EVENT_NAME    ${{ github.event_name }}"
+      - run: echo "GITHUB_EVENT_PATH    ${{ github.event_path }}"
+      - run: echo "GITHUB_HEAD_REF      ${{ github.head_ref }}"
+      - run: echo "GITHUB_JOB           ${{ github.job }}"
+      - run: echo "GITHUB_REF           ${{ github.ref }}"
+      - run: echo "GITHUB_REF_NAME      ${{ github.ref_name }}"
+      - run: echo "GITHUB_REF_PROTECTED ${{ github.ref_protected }}"
+      - run: echo "GITHUB_REF_TYPE      ${{ github.ref_type }}"
+
+      # - uses: actions/checkout@v2
+      # - name: payload
+
+      #   run: echo "${{ github.event.client_payload.env }}"
+      # - name: List files
+      #   run: |
+      #     pwd
+      #     ls -a
+      #     echo $GITHUB_SHA
+      #     echo $GITHUB_REPOSITORY
+      #     echo $GITHUB_WORKSPACE
+      #     echo "${{ github.token }}"
+      #     # git clone git@github:$GIT_REPOSITORY
+      #     # git checkout $GITHUB_SHA
+
+  build-and-deploy:
     timeout-minutes: 5
     runs-on: ubuntu-latest
-    env:
-      SURGE_LOGIN: ${{ secrets.SURGE_LOGIN }}
-      SURGE_TOKEN: ${{ secrets.SURGE_TOKEN }}
+
     steps:
       - uses: actions/checkout@v2
-
-      - name: Get the current branch name - not pr
-        if: github.event_name != 'pull_request'
-        run: echo "::set-output name=branch::${GITHUB_REF#refs/heads/}"
-        id: myref
-
-      - name: Get the current branch name - pr
-        if: github.event_name == 'pull_request'
-        run: echo "::set-output name=branch::${GITHUB_HEAD_REF}"
-        id: srcref
-
-      - name: Show current branch
-        if: github.event_name != 'pull_request'
-        run: echo ${{ steps.myref.outputs.branch }}
-
-      - name: Show source branch
-        if: github.event_name == 'pull_request'
-        run: echo ${{ steps.srcref.outputs.branch }}
 
       - name: Get yarn cache directory path
         id: yarn-cache-dir-path
@@ -50,6 +57,7 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: "16.x"
+
       - run: corepack enable
       - run: yarn set version stable
       - run: yarn install --frozen-lockfile
@@ -65,36 +73,30 @@ jobs:
           name: code-coverage
 
       - name: Update Browser DB
-        if: github.event_name == 'push'
         run: npx browserslist@latest --update-db
 
       - name: Build Project
-        if: github.event_name == 'push'
         run: yarn build
 
       - name: Upload Build Folder
-        if: github.event_name == 'push' && success()
+        if: success()
         uses: actions/upload-artifact@v1
         with:
           path: build
           name: build
 
       - name: Zip Assets
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: |
           zip -r build.zip ./build
           zip -r coverage.zip ./coverage
 
       - name: Create Release
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main' && steps.srcref.outputs.branch == 'develop'
         run: npx semantic-release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Deploy to Staging
-        if: github.event_name == 'push' && github.ref == 'refs/heads/develop'
-        run: npx surge --project build --domain fantastic-dude.surge.sh
-
       - name: Deploy to Production
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main' && steps.srcref.outputs.branch == 'develop'
         run: npx surge --project build --domain pink-dolphin.surge.sh
+        env:
+          SURGE_LOGIN: ${{ secrets.SURGE_LOGIN }}
+          SURGE_TOKEN: ${{ secrets.SURGE_TOKEN }}
