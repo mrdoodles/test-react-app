@@ -16,7 +16,6 @@ jobs:
           exit 1
 
   main-pr-info:
-    needs: [validate-branch]
     timeout-minutes: 1
     runs-on: ubuntu-latest
     steps:
