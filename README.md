@@ -1,4 +1,6 @@
-![](https://github.com/mrdoodles/test-react-app/workflows/Develop PR/badge.svg?branch=develop&event=push)
+<p align="center">
+![Development Badge](https://github.com/mrdoodles/test-react-app/workflows/Develop%20Push/badge.svg?branch=develop&event=push)
+</p>
 
 # Getting Started with Create React App
 
