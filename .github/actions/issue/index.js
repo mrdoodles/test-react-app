@@ -15,7 +15,7 @@ try {
 
   core.setSecret(token);
 
-  const octokit = new github.getOctokit(token);
+  const octokit = github.getOctokit(token);
 
   const response = octokit.issues.create({
     ...github.context.repo,
