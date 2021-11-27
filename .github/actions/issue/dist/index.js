@@ -4285,7 +4285,7 @@ try {
   const body = core.getInput("body");
   const assignees = core.getInput("assignees");
 
-  core.setSecret(token);
+  //core.setSecret(token);
 
   const octokit = github.getOctokit(token);
 
