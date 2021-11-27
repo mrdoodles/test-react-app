@@ -3,6 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@actions/core": "^1.6.0",
+    "@actions/github": "^5.0.0",
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
@@ -17,7 +19,8 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "format:check": "prettier --check \"**/*.{js,jsx,ts,yml,yaml,json,css,scss,md}\"",
-    "format": "prettier --write \"**/*.{js,jsx,ts,yml,yaml,json,css,scss,md}\""
+    "format": "prettier --write \"**/*.{js,jsx,ts,yml,yaml,json,css,scss,md}\"",
+    "build:actions": "npx ncc build .github/actions/hello/index.js -o .github/actions/hello/dist"
   },
   "husky": {
     "hooks": {
@@ -46,6 +49,7 @@
   "devDependencies": {
     "@commitlint/cli": "^15.0.0",
     "@commitlint/config-conventional": "^15.0.0",
+    "@zeit/ncc": "^0.22.3",
     "cz-conventional-changelog": "^3.3.0",
     "eslint-config-react-app": "^6.0.0",
     "husky": "^4.3.8",
