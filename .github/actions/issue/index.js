@@ -24,6 +24,10 @@ try {
     assignees: assignees ? assignees.split("\n") : undefined,
   });
 
+  core.startGroup("Response Data");
+  console.log(JSON.stringify(response));
+  core.endGroup();
+
   core.setOutput("issue", JSON.stringify(response.data));
 } catch (error) {
   core.setFailed(error.message);
