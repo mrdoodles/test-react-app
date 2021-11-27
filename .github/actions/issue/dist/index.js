@@ -4287,20 +4287,23 @@ try {
 
   //core.setSecret(token);
 
-  const octokit = github.getOctokit(token);
+  async function run() {
+    const octokit = github.getOctokit(token);
 
-  const response = octokit.rest.issues.create({
-    ...github.context.repo,
-    title,
-    body,
-    assignees: assignees ? assignees.split("\n") : undefined,
-  });
+    const { data: response } = await octokit.rest.issues.create({
+      ...github.context.repo,
+      title,
+      body,
+      assignees: assignees ? assignees.split("\n") : undefined,
+    });
 
-  core.startGroup("Response Data");
-  console.log(JSON.stringify(response));
-  core.endGroup();
+    core.startGroup("Response Data");
+    console.log(JSON.stringify(response));
+    core.endGroup();
 
-  core.setOutput("issue", JSON.stringify(response.data));
+    core.setOutput("issue", JSON.stringify(response.data));
+  }
+  run();
 } catch (error) {
   core.setFailed(error.message);
 }
