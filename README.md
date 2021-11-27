@@ -1,8 +1,10 @@
+# TEST-REACT-APP
+
 <p align="center">
-<img  src="https://github.com/mrdoodles/test-react-app/workflows/Develop%20Push/badge.svg?branch=develop&event=push" alt="Development Status"/>
+<img src="https://github.com/mrdoodles/test-react-app/workflows/CI-Develop/badge.svg?branch=develop&event=push" alt="Development Status"/>&nbsp;<img src="https://github.com/mrdoodles/test-react-app/workflows/CI-Main/badge.svg" alt="Main Status"/>&nbsp;<img src="https://codecov.io/gh/mrdoodles/test-react-app/branch/main/graph/badge.svg" alt="Code Coverage" />
 </p>
 
-# Getting Started with Create React App
+## Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
