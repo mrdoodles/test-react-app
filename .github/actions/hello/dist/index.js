@@ -881,7 +881,7 @@ const core = __webpack_require__(470);
 const github = __webpack_require__(469);
 
 try {
-  //   throw new Error("an error");
+  throw new Error("an error");
   const name = core.getInput("who-to-greet");
   console.log(`Hello ${name}`);
 
