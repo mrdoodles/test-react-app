@@ -7,7 +7,7 @@ COPY --from=composer /usr/bin/composer /usr/bin/composer
 
 WORKDIR /usr/src/app
 
-COPY src/* .
+COPY src/* ./
 
 RUN composer install
 
