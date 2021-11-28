@@ -11,6 +11,4 @@ COPY src/* ./
 
 RUN composer install
 
-COPY entrypoint.sh /entrypoint.sh
-
 ENTRYPOINT [ "php" "/usr/src/app/slack.php" ]
