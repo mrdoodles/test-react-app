@@ -51,7 +51,7 @@ $response = Requests::post(
 
 echo "::group::Slack Response\n";
 var_dump($response);
-echo "::endgroup::"\n;
+echo "::endgroup::\n";
 
 if(!$response->success) {
     echo $response->body;
