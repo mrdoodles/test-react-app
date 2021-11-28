@@ -1,4 +1,5 @@
 <?php
+
 define('REQUESTS_SILENCE_PSR0_DEPRECATIONS', true);
 require_once 'vendor/autoload.php';
 Requests::register_autoloader();
@@ -6,7 +7,7 @@ Requests::register_autoloader();
 var_dump($argv);
 var_dump($_ENV);
 
-echo "::debug::Sending a request to Slack\n";
+// echo "::debug::Sending a request to Slack\n";
 
 $response = Requests::post(
     $_ENV['INPUT_SLACK_BUILD_WEBHOOK'],
@@ -41,10 +42,10 @@ $response = Requests::post(
                         array(
                             "type" => "mrkdwn",
                             "text" => "*SHA:*\n{$_ENV['GITHUB_SHA']}",
-                        )
-                    )
-                )
-            )
+                        ),
+                    ),
+                ),
+            ),
 
     ))
 );
