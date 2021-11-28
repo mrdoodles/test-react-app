@@ -13,25 +13,19 @@ try {
   const body = core.getInput("body");
   const assignees = core.getInput("assignees");
 
-  //core.setSecret(token);
+  //   core.setSecret(token);
 
-  async function run() {
-    const octokit = github.getOctokit(token);
+  //   const octokit = new github.GitHub(token);
+  const octokit = github.getOctokit(token);
 
-    const { data: response } = await octokit.rest.issues.create({
-      ...github.context.repo,
-      title,
-      body,
-      assignees: assignees ? assignees.split("\n") : undefined,
-    });
+  const response = octokit.rest.issues.create({
+    ...github.context.repo,
+    title,
+    body,
+    assignees: assignees ? assignees.split("\n") : undefined,
+  });
 
-    core.startGroup("Response Data");
-    console.log(JSON.stringify(response));
-    core.endGroup();
-
-    core.setOutput("issue", JSON.stringify(response.data));
-  }
-  run();
+  core.setOutput("issue", JSON.stringify(response.data));
 } catch (error) {
   core.setFailed(error.message);
 }
