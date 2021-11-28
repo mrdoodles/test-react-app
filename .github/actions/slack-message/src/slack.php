@@ -1,6 +1,6 @@
 <?php
 
-define('REQUESTS_SILENCE_PSR0_DEPRECATIONS', true);
+//define('REQUESTS_SILENCE_PSR0_DEPRECATIONS', true);
 
 var_dump($argv);
 var_dump($_ENV);
