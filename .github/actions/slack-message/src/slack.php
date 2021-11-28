@@ -3,8 +3,8 @@ define('REQUESTS_SILENCE_PSR0_DEPRECATIONS', true);
 require_once 'vendor/autoload.php';
 Requests::register_autoloader();
 
-// var_dump($argv);
-// var_dump($_ENV);
+var_dump($argv);
+var_dump($_ENV);
 
 echo "::debug ::Sendo=ing a request to Slack\n";
 
@@ -49,7 +49,7 @@ $response = Requests::post(
     ))
 );
 
-echo "::group:: Slack Response\n";
+echo "::group::Slack Response\n";
 var_dump($response);
 echo "::endgroup::"\n;
 
