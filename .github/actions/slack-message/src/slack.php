@@ -6,7 +6,7 @@ Requests::register_autoloader();
 var_dump($argv);
 var_dump($_ENV);
 
-echo "::debug ::Sendo=ing a request to Slack\n";
+echo "::debug::Sending a request to Slack\n";
 
 $response = Requests::post(
     $_ENV['INPUT_SLACK_BUILD_WEBHOOK'],
@@ -49,9 +49,9 @@ $response = Requests::post(
     ))
 );
 
-echo "::group::Slack Response\n";
-var_dump($response);
-echo "::endgroup::\n";
+// echo "::group::Slack Response\n";
+// var_dump($response);
+// echo "::endgroup::\n";
 
 if(!$response->success) {
     echo $response->body;
