@@ -4273,34 +4273,38 @@ exports.getIDToken = getIDToken;
 const core = __webpack_require__(470);
 const github = __webpack_require__(469);
 
-try {
-  //   throw new Error("an error");
+async function run() {
+  try {
+    //   throw new Error("an error");
 
-  //   core.debug("Debug message");
-  //   core.warning("Warning message");
-  //   core.error("Error message");
+    //   core.debug("Debug message");
+    //   core.warning("Warning message");
+    //   core.error("Error message");
 
-  const token = core.getInput("token");
-  const title = core.getInput("title");
-  const body = core.getInput("body");
-  const assignees = core.getInput("assignees");
+    const token = core.getInput("token");
+    const title = core.getInput("title");
+    const body = core.getInput("body");
+    const assignees = core.getInput("assignees");
 
-  //   core.setSecret(token);
+    //   core.setSecret(token);
 
-  //   const octokit = new github.GitHub(token);
-  const octokit = github.getOctokit(token);
+    //   const octokit = new github.GitHub(token);
+    const octokit = github.getOctokit(token);
 
-  const response = octokit.rest.issues.create({
-    ...github.context.repo,
-    title,
-    body,
-    assignees: assignees ? assignees.split("\n") : undefined,
-  });
+    const response = await octokit.rest.issues.create({
+      ...github.context.repo,
+      title,
+      body,
+      assignees: assignees ? assignees.split("\n") : undefined,
+    });
 
-  core.setOutput("issue", JSON.stringify(response));
-} catch (error) {
-  core.setFailed(error.message);
+    core.setOutput("issue", JSON.stringify(response.data));
+  } catch (error) {
+    core.setFailed(error.message);
+  }
 }
+
+run();
 
 
 /***/ }),
