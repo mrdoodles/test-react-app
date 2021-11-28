@@ -11,8 +11,8 @@ jobs:
       - name: Send a slack message
         uses: ./.github/actions/slack-message
         with:
-          slack_webhook: ${{ secrets.SLACK_BUILD_WEBHOOK }}
-          slack_message: Hello Slack
+          slack_webhook: ${{ secrets.SLACK_WEBHOOK }}
+          message: Hello Slack
 
       - uses: ./.github/actions/issue
         id: issue
