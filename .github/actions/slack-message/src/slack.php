@@ -19,7 +19,7 @@ $response = Requests::post(
                     "type" => "section",
                     "text" => array (
                         "type" => "mrkdwn",
-                        "text" => $_ENV['INPUT_SLACK_MESSAGE'],
+                        "text" => $_ENV['INPUT_MESSAGE'],
                     ),
                 ),
                 array (
