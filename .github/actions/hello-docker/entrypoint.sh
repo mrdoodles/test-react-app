@@ -1,5 +1,11 @@
 #!/bin/sh -l
 
+# for error use normal exit with code
+# if [ true ]; then
+echo "Error"
+#   exit 1
+# fi
+
 echo "::debug ::Debug Message"
 echo "::warning ::Warning Message"
 echo "::error ::Error Message"

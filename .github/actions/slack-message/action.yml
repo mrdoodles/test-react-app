@@ -1,0 +1,17 @@
+name: Slack Message
+author: Tim Preece
+description: Send message to slack
+inputs:
+  slack_webhook:
+    description: "Slack webhook url"
+    required: true
+  slack_message:
+    description: "Message to send to slack channel"
+    required: true
+runs:
+  using: "docker"
+  image: "Dockerfile"
+  # entrypoint:
+  args:
+    - ${{ slack_webhook }}
+    - ${{ slack_message }}

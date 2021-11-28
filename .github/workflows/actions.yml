@@ -8,6 +8,12 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - name: Send a slack message
+        uses: ./.github/actions/slack-message
+        with:
+          slack_webhook: ${{ secrets.SLACK_BUILD_WEBHOOK }}
+          slack_message: Hello Slack
+
       - uses: ./.github/actions/issue
         id: issue
         with:
@@ -21,11 +27,11 @@ jobs:
       - run: |
           echo ${{ steps.issue.outputs.issue }}
 
-      - uses: ./.github/actions/hello-docker
-        id: hello
-        with:
-          who-to-greet: "Mr Doodles"
+      # - uses: ./.github/actions/hello-docker
+      #   id: hello
+      #   with:
+      #     who-to-greet: "Mr Doodles"
 
-      - run: |
-          echo "Time: ${{ steps.hello.outputs.time }}"
-          echo $HELLO
+      # - run: |
+      #     echo "Time: ${{ steps.hello.outputs.time }}"
+      #     echo $HELLO
