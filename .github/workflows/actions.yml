@@ -8,10 +8,30 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - uses: ./github/actions/hello
-      - id: hello
+      - name: Send a slack message
+        uses: ./.github/actions/slack-message
         with:
-          who-to-greet: "Mr Doodles"
+          slack_webhook: ${{ secrets.SLACK_WEBHOOK }}
+          message: Hello Slack
+
+      - uses: ./.github/actions/issue
+        id: issue
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          title: Test issue title
+          body: Test issue body
+          # assignees: "mrdoodles" #  line seperated
+          assignees: |
+            mrdoodles
 
       - run: |
-          echo "Time: ${{ steps.hello.outputs.time }}"
+          echo ${{ steps.issue.outputs.issue }}
+
+      # - uses: ./.github/actions/hello-docker
+      #   id: hello
+      #   with:
+      #     who-to-greet: "Mr Doodles"
+
+      # - run: |
+      #     echo "Time: ${{ steps.hello.outputs.time }}"
+      #     echo $HELLO

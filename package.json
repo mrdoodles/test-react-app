@@ -20,7 +20,9 @@
     "eject": "react-scripts eject",
     "format:check": "prettier --check \"**/*.{js,jsx,ts,yml,yaml,json,css,scss,md}\"",
     "format": "prettier --write \"**/*.{js,jsx,ts,yml,yaml,json,css,scss,md}\"",
-    "build:actions": "npx ncc build .github/actions/hello/index.js -o .github/actions/hello/dist"
+    "build-action:hello": "npx ncc build .github/actions/hello/index.js -o .github/actions/hello/dist",
+    "build-action:issue": "npx ncc build .github/actions/issue/index.js -o .github/actions/issue/dist",
+    "build:actions": "npm-run-all --parallel build-action:**"
   },
   "husky": {
     "hooks": {
@@ -53,8 +55,10 @@
     "cz-conventional-changelog": "^3.3.0",
     "eslint-config-react-app": "^6.0.0",
     "husky": "^4.3.8",
+    "npm-run-all": "^4.1.5",
     "pinst": "^2.1.6",
     "prettier": "2.4.1",
+    "run-all": "^1.0.1",
     "semantic-release": "^18.0.1"
   },
   "config": {
