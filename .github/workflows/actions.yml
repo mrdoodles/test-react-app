@@ -14,7 +14,8 @@ jobs:
           slack_webhook: ${{ secrets.SLACK_WEBHOOK }}
           message: Hello Slack
 
-      - uses: ./.github/actions/issue
+      # - uses: ./.github/actions/issue
+      - uses: mrdoodles/open-issue@v1
         id: issue
         with:
           token: ${{ secrets.GITHUB_TOKEN }}

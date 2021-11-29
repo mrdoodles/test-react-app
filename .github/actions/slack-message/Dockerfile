@@ -1,16 +1,47 @@
-FROM php:7.4.2
+# build stage
+FROM rust:slim as build
 
-# RUN apt-get update && apt install zip -y
-# RUN apt-get clean autoclean && apt-get autoremove -y && rm -rf /var/lib/{apt,dpkg,cache,log}/
+# install libpq, libsqlite and create new empty binary project
+RUN apt-get update; \
+    rm -rf /var/lib/apt/lists/*; \
+    USER=root cargo new --bin app
+WORKDIR /app
 
-COPY --from=composer /usr/bin/composer /usr/bin/composer
+# copy manifests
+COPY ./Cargo.toml ./Cargo.toml
 
-WORKDIR /usr/src/app
+# build this project to cache dependencies
+# RUN cargo build --release; \
+#     rm src/*.rs
 
-COPY src/* ./
+# copy project source and necessary files
+COPY ./src ./src
 
-RUN apt-get update
-RUN apt-get -y install zip
-RUN composer install
+RUN cargo build --release
+#  \
+#   mv ./target/release/slack-message /usr/local/bin/
 
-ENTRYPOINT [ "php" "/usr/src/app/slack.php" ]
+# # rebuild app with project source
+# RUN rm ./target/release/slack-message*; \
+#       rm ./target/release/deps/slack_message*; \
+#       cargo build --release
+
+# deploy stage
+FROM debian:buster-slim
+
+# create app directory
+RUN mkdir app
+WORKDIR /app
+
+# install libpq and libsqlite
+RUN apt-get update; \
+    rm -rf /var/lib/apt/lists/*
+
+# copy binary and configuration files
+COPY --from=build /app/target/release/slack-message /usr/local/bin/
+
+# run the binary
+CMD ["/usr/local/bin/slack-message"]
+
+# USER root
+# CMD ["tail", "-f", "/dev/null"]
