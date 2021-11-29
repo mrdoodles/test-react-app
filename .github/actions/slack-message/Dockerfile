@@ -1,47 +1,47 @@
-# build stage
-FROM rust:slim as build
+####################################################################################################
+## Builder
+####################################################################################################
+FROM rust:latest AS builder
 
-# install libpq, libsqlite and create new empty binary project
-RUN apt-get update; \
-    rm -rf /var/lib/apt/lists/*; \
-    USER=root cargo new --bin app
+RUN rustup target add x86_64-unknown-linux-musl
+RUN apt update && apt install -y musl-tools musl-dev
+RUN update-ca-certificates
+
+# Create appuser
+ENV USER=rusty
+ENV UID=10001
+
+RUN adduser \
+    --disabled-password \
+    --gecos "" \
+    --home "/nonexistent" \
+    --shell "/sbin/nologin" \
+    --no-create-home \
+    --uid "${UID}" \
+    "${USER}"
+
+
 WORKDIR /app
 
-# copy manifests
-COPY ./Cargo.toml ./Cargo.toml
+COPY ./ .
 
-# build this project to cache dependencies
-# RUN cargo build --release; \
-#     rm src/*.rs
+RUN cargo build --target x86_64-unknown-linux-musl --release
 
-# copy project source and necessary files
-COPY ./src ./src
+####################################################################################################
+## Final image
+####################################################################################################
+FROM scratch
 
-RUN cargo build --release
-#  \
-#   mv ./target/release/slack-message /usr/local/bin/
+# Import from builder.
+COPY --from=builder /etc/passwd /etc/passwd
+COPY --from=builder /etc/group /etc/group
 
-# # rebuild app with project source
-# RUN rm ./target/release/slack-message*; \
-#       rm ./target/release/deps/slack_message*; \
-#       cargo build --release
-
-# deploy stage
-FROM debian:buster-slim
-
-# create app directory
-RUN mkdir app
 WORKDIR /app
 
-# install libpq and libsqlite
-RUN apt-get update; \
-    rm -rf /var/lib/apt/lists/*
+# Copy our build
+COPY --from=builder /app/target/x86_64-unknown-linux-musl/release/slack-message ./
 
-# copy binary and configuration files
-COPY --from=build /app/target/release/slack-message /usr/local/bin/
+# Use an unprivileged user.
+USER rusty:rusty
 
-# run the binary
-CMD ["/usr/local/bin/slack-message"]
-
-# USER root
-# CMD ["tail", "-f", "/dev/null"]
+CMD ["/app/slack-message"]

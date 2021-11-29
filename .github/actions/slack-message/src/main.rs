@@ -2,8 +2,8 @@ use serde_json::json;
 use std::env;
 use std::process;
 
-fn main() -> attohttpc::Result {
-    env_logger::init();
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let slack_webhook = env::var("INPUT_SLACK_WEBHOOK").expect("SLACK_WEBHOOK env var is required");
     let slack_message = env::var("INPUT_MESSAGE").expect("MESSAGE env var is required");
@@ -47,18 +47,14 @@ fn main() -> attohttpc::Result {
         ]
     });
 
-    let resp = attohttpc::post(slack_webhook).json(&obj)?.send()?;
+    let resp: String = reqwest::Client::new()
+        .post(slack_webhook)
+        .json(&obj).send().await?
+        .text().await?;
 
-    let is_success: bool = resp.is_success();
-    let resp_text = resp.text().unwrap();
-
-    println!("::group::Slack Reponse");
-    println!("{}", &resp_text);
-    println!("::endgroup::");
-
-    if !is_success {
+    if resp != "ok" {
+        println!("::error ::{}", resp);
         process::exit(1);
     }
-
     Ok(())
 }

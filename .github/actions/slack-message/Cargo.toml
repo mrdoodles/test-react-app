@@ -6,7 +6,10 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-# slack-hook = "0.7"
-attohttpc = { version = "0.18.0", features = ["json", "form", "rustls"] }
 serde_json = "1.0"
-env_logger = "0.9"
+#serde = { version = "1", features = ["derive"] }
+reqwest = { version = "0.11", default-features = false, features = ["json", "rustls-tls", "blocking"] }
+tokio = { version = "1", features = ["full"] }
+
+[target.'cfg(all(target_env = "musl", target_pointer_width = "64"))'.dependencies.jemallocator]
+version = "0.3"
