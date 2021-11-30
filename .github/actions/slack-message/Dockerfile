@@ -8,17 +8,17 @@ RUN apt update && apt install -y musl-tools musl-dev
 RUN update-ca-certificates
 
 # Create appuser
-ENV USER=rusty
-ENV UID=10001
+# ENV USER=rusty
+# ENV UID=10001
 
-RUN adduser \
-    --disabled-password \
-    --gecos "" \
-    --home "/nonexistent" \
-    --shell "/sbin/nologin" \
-    --no-create-home \
-    --uid "${UID}" \
-    "${USER}"
+# RUN adduser \
+#     --disabled-password \
+#     --gecos "" \
+#     --home "/nonexistent" \
+#     --shell "/sbin/nologin" \
+#     --no-create-home \
+#     --uid "${UID}" \
+#     "${USER}"
 
 
 WORKDIR /app
@@ -30,7 +30,8 @@ RUN cargo build --target x86_64-unknown-linux-musl --release
 ####################################################################################################
 ## Final image
 ####################################################################################################
-FROM scratch
+# FROM scratch
+FROM alpine
 
 # Import from builder.
 # COPY --from=builder /etc/passwd /etc/passwd
@@ -44,4 +45,7 @@ COPY --from=builder /app/target/x86_64-unknown-linux-musl/release/slack-message 
 # Use an unprivileged user.
 #USER rusty:rusty
 
-CMD ["/app/slack-message"]
+# CMD ["/app/slack-message"]
+
+ENTRYPOINT [ "/app/slack-message" ]
+# ENTRYPOINT [ "php" "/usr/src/app/slack.php" ]
