@@ -33,8 +33,8 @@ RUN cargo build --target x86_64-unknown-linux-musl --release
 FROM scratch
 
 # Import from builder.
-COPY --from=builder /etc/passwd /etc/passwd
-COPY --from=builder /etc/group /etc/group
+# COPY --from=builder /etc/passwd /etc/passwd
+# COPY --from=builder /etc/group /etc/group
 
 WORKDIR /app
 
@@ -42,6 +42,6 @@ WORKDIR /app
 COPY --from=builder /app/target/x86_64-unknown-linux-musl/release/slack-message ./
 
 # Use an unprivileged user.
-USER rusty:rusty
+#USER rusty:rusty
 
 CMD ["/app/slack-message"]
